@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">equipoCuatro</string>
     <string name="title">pico botella</string>
+    <string name="retos">Retos</string>
+    <string name="agregar_reto">Agregar reto</string>
+    <string name="escriba_el_reto">Escriba el reto</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="guardar">Guardar</string>
 </resources>
