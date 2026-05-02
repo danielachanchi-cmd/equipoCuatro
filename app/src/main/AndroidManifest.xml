@@ -12,12 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EquipoCuatro">
         <activity
-            android:name=".RetosActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
