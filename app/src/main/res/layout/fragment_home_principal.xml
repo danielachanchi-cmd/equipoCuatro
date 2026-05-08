@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo1">
+
+    <!-- TOOLBAR -->
+    <include
+        android:id="@+id/toolbarHome"
+        layout="@layout/toolbar_principal" />
+
+    <!-- BOTELLA -->
+    <ImageView
+        android:id="@+id/imgBotella"
+        android:layout_width="180dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:contentDescription="@string/botella"
+        android:scaleType="fitCenter"
+        android:src="@drawable/botella1" />
+
+    <!-- NUMERO -->
+    <TextView
+        android:id="@+id/txtNumero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="2"
+        android:textColor="#FF5A00"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <!-- ANIMACION -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieButton"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/orange_circle"/>
+
+    <!-- TEXTO -->
+    <TextView
+        android:id="@+id/txtPresioname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="60dp"
+        android:text="@string/presioname"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</FrameLayout>
