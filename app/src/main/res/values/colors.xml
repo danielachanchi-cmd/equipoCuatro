@@ -8,4 +8,5 @@
     <color name="Green_edit">#147C5E</color>
     <color name="Red_delete">#B00020</color>
     <color name="gray_disabled">#D3D3D3</color>
+    <color name="text_color">#555555</color>
 </resources>

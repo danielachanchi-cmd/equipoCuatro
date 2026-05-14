@@ -8,4 +8,5 @@
     <string name="guardar">Guardar</string>
     <string name="botella">Botella</string>
     <string name="presioname">Presióname</string>
+    <string name="plantilla_reto">Realiza un RecyclerView que liste una api de Pokemones</string>
 </resources>
