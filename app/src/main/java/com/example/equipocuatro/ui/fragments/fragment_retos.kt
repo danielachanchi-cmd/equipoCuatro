@@ -1,15 +1,12 @@
-package com.example.equipocuatro.fragment
+package com.example.equipocuatro.ui.fragments
 
-import android.os.Binder
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.equipocuatro.R
+import androidx.fragment.app.Fragment
 import com.example.equipocuatro.databinding.FragmentRetosBinding
-import com.example.equipocuatro.dialogos.AgregarReto.Companion.showDialgoAgregarReto
-
+import com.example.equipocuatro.ui.dialogs.AgregarReto
 
 class fragment_retos : Fragment() {
 
@@ -33,7 +30,7 @@ class fragment_retos : Fragment() {
 
     private fun agregarReto(){
         binding.btnAgregar.setOnClickListener {
-            showDialgoAgregarReto(binding.root.context)
+            AgregarReto.Companion.showDialgoAgregarReto(binding.root.context)
         }
     }
 }
