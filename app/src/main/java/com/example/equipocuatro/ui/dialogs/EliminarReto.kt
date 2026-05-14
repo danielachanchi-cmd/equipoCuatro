@@ -1,4 +1,4 @@
-package com.example.equipocuatro.dialogos
+package com.example.equipocuatro.ui.dialogs
 
 import android.content.Context
 import android.view.LayoutInflater

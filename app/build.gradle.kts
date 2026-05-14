@@ -35,12 +35,15 @@ android {
     }
     buildFeatures{
         dataBinding = true
+        viewBinding = true
     }
 }
 
 dependencies {
     val navVersion = "2.7.3"
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
