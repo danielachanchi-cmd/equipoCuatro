@@ -6,4 +6,6 @@
     <string name="escriba_el_reto">Escriba el reto</string>
     <string name="cancelar">Cancelar</string>
     <string name="guardar">Guardar</string>
+    <string name="botella">Botella</string>
+    <string name="presioname">Presióname</string>
 </resources>
