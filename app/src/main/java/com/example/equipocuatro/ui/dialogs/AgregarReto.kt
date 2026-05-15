@@ -11,7 +11,8 @@ import com.example.equipocuatro.databinding.DialogAgregarRetoBinding
 class AgregarReto {
     companion object{
         fun showDialgoAgregarReto(
-            context: Context
+            context: Context,
+            onGuardar: (String) -> Unit = {}
         ){
             val inflater = LayoutInflater.from(context)
             val binding = DialogAgregarRetoBinding.inflate(inflater)
@@ -21,6 +22,7 @@ class AgregarReto {
             alertDialog.setCancelable(false)
             alertDialog.setView(binding.root)
 
+            // Activa el boton guardar solo cuando hay texto escrito.
             binding.etReto.addTextChangedListener {
                 var reto = binding.etReto.text
                 if(reto.isNotEmpty()){
@@ -33,7 +35,12 @@ class AgregarReto {
             }
 
             binding.btnGuardar.setOnClickListener {
-                alertDialog.dismiss()
+                // Envia el texto escrito al fragment para agregarlo al RecyclerView.
+                val reto = binding.etReto.text.toString().trim()
+                if (reto.isNotEmpty()) {
+                    onGuardar(reto)
+                    alertDialog.dismiss()
+                }
             }
 
             binding.btnCancelar.setOnClickListener {
