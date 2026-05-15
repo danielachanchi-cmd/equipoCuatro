@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.equipocuatro.R
+=======
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.equipocuatro.databinding.FragmentRetosBinding
 import com.example.equipocuatro.ui.adapter.RetoAdapter
@@ -34,6 +37,7 @@ class fragment_retos : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         configurarRecyclerView()
         agregarReto()
+        volver()
     }
 
     private fun configurarRecyclerView() {
@@ -97,4 +101,12 @@ class fragment_retos : Fragment() {
             }
         }
     }
+
+    private fun volver(){
+        binding.toolbarRetos.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.action_fragment_retos_to_home_principal24)
+        }
+    }
+}
+=======
 }

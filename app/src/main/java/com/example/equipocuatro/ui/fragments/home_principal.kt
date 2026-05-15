@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
 import com.example.equipocuatro.databinding.FragmentHomePrincipalBinding
 
@@ -46,10 +47,10 @@ class home_principal : Fragment() {
 
         // Criterio 4 y HU-5.0: Instrucciones del juego
         binding.toolbarHome.controlButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, Instrucciones())
-                .addToBackStack(null) // Permite volver al home con el botón atrás
-                .commit()
+            findNavController().navigate(R.id.action_home_principal2_to_instrucciones)
+        }
+        binding.toolbarHome.addButton.setOnClickListener {
+            findNavController().navigate(R.id.action_home_principal2_to_fragment_retos2)
         }
     }
 
