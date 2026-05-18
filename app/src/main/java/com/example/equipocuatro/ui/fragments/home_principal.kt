@@ -37,14 +37,6 @@ class home_principal : Fragment() {
             startActivity(intent)
         }
 
-        // Abre fragment_retos
-        binding.toolbarHome.addButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, fragment_retos())
-                .addToBackStack(null)
-                .commit()
-        }
-
         // Criterio 4 y HU-5.0: Instrucciones del juego
         binding.toolbarHome.controlButton.setOnClickListener {
             findNavController().navigate(R.id.action_home_principal2_to_instrucciones)

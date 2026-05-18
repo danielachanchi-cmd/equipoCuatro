@@ -3,17 +3,25 @@ package com.example.equipocuatro.ui.dialogs
 import android.R
 import android.content.Context
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.example.equipocuatro.databinding.DialogAgregarRetoBinding
+import com.example.equipocuatro.viewmodel.RetoViewModel
+import com.example.equipocuatro.model.Reto
 
 class AgregarReto {
     companion object{
+
         fun showDialgoAgregarReto(
             context: Context,
-            onGuardar: (String) -> Unit = {}
+            onGuardar:() -> Unit
+
         ){
+            val retoViewModel = ViewModelProvider(context as AppCompatActivity).get(RetoViewModel::class.java)
             val inflater = LayoutInflater.from(context)
             val binding = DialogAgregarRetoBinding.inflate(inflater)
 
@@ -22,9 +30,9 @@ class AgregarReto {
             alertDialog.setCancelable(false)
             alertDialog.setView(binding.root)
 
-            // Activa el boton guardar solo cuando hay texto escrito.
+
             binding.etReto.addTextChangedListener {
-                var reto = binding.etReto.text
+                val reto = binding.etReto.text
                 if(reto.isNotEmpty()){
                     binding.btnGuardar.setBackgroundColor(ContextCompat.getColor(context, com.example.equipocuatro.R.color.orange))
                     binding.btnGuardar.isEnabled = true
@@ -35,12 +43,15 @@ class AgregarReto {
             }
 
             binding.btnGuardar.setOnClickListener {
-                // Envia el texto escrito al fragment para agregarlo al RecyclerView.
-                val reto = binding.etReto.text.toString().trim()
-                if (reto.isNotEmpty()) {
-                    onGuardar(reto)
-                    alertDialog.dismiss()
+
+                val descripcionReto = binding.etReto.text.toString().trim()
+                val reto = Reto(descripcion = descripcionReto)
+
+                retoViewModel.saveReto(reto){message ->
+                    Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+                    onGuardar()
                 }
+                alertDialog.dismiss()
             }
 
             binding.btnCancelar.setOnClickListener {

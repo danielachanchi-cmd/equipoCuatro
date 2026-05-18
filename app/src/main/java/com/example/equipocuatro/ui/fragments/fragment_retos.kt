@@ -5,24 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
-=======
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.equipocuatro.databinding.FragmentRetosBinding
 import com.example.equipocuatro.ui.adapter.RetoAdapter
 import com.example.equipocuatro.ui.dialogs.AgregarReto
 import com.example.equipocuatro.ui.dialogs.EditarReto
 import com.example.equipocuatro.ui.dialogs.EliminarReto
-import com.example.equipocuatro.viewmodel.Reto
+import com.example.equipocuatro.model.Reto
+import com.example.equipocuatro.viewmodel.RetoViewModel
 
 class fragment_retos : Fragment() {
 
     private lateinit var binding: FragmentRetosBinding
     private lateinit var retoAdapter: RetoAdapter
+    private val retoViewModel: RetoViewModel by viewModels()
     // Lista temporal de retos que se muestra en pantalla.
     private val retos = mutableListOf<Reto>()
-    private var siguienteId = 1
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,20 +38,21 @@ class fragment_retos : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configurarRecyclerView()
+        retoViewModel.getListReto()
+        retoViewModel.listReto.observe(viewLifecycleOwner){listaActualizada->
+            retoAdapter.actualizarRetos(listaActualizada)
+        }
         agregarReto()
         volver()
+
     }
 
     private fun configurarRecyclerView() {
         // Configura el adapter y las acciones de editar/eliminar.
         retoAdapter = RetoAdapter(
-            retos = retos,
-            onEditarClick = { reto ->
-                mostrarDialogoEditar(reto)
-            },
-            onEliminarClick = { reto ->
-                mostrarDialogoEliminar(reto)
-            }
+            retos = mutableListOf(),
+            onEditarClick = { reto -> mostrarDialogoEditar(reto) },
+            onEliminarClick = { reto -> mostrarDialogoEliminar(reto) }
         )
 
         // Conecta el RecyclerView con su layoutManager y adapter.
@@ -61,44 +64,42 @@ class fragment_retos : Fragment() {
 
     private fun agregarReto(){
         binding.btnAgregar.setOnClickListener {
-            AgregarReto.Companion.showDialgoAgregarReto(requireContext()) { descripcion ->
-                // Agrega el nuevo reto a la lista y actualiza el RecyclerView.
-                retos.add(
-                    Reto(
-                        id = siguienteId++,
-                        descripcion = descripcion
-                    )
-                )
-                retoAdapter.notifyItemInserted(retos.lastIndex)
+            AgregarReto.showDialgoAgregarReto(requireContext()){
+                retoViewModel.getListReto()
             }
         }
     }
 
     private fun mostrarDialogoEditar(reto: Reto) {
-        // Abre el dialogo de editar y actualiza
+
         EditarReto.showDialogoEditarReto(
             context = requireContext(),
             retoActual = reto.descripcion
         ) { descripcionEditada ->
-            val posicion = retos.indexOfFirst { it.id == reto.id }
-            if (posicion != -1) {
-                retos[posicion] = reto.copy(descripcion = descripcionEditada)
-                retoAdapter.notifyItemChanged(posicion)
-            }
+            //Guiate por como hice la función de crear reto y el video y el git del profe
+            // 1. En 'RetosRepository.kt', crear: suspend fun updateReto(reto: Reto)
+            // 2. En 'RetoViewModel.kt', crear: fun updateReto(reto: Reto)
+            // 3. Descomentar la línea de abajo para ejecutar la actualización:
+            // retoViewModel.updateReto(reto.copy(descripcion = descripcionEditada))
+
+            // Refresca la lista de la base de datos para ver el cambio
+            retoViewModel.getListReto()
         }
     }
 
     private fun mostrarDialogoEliminar(reto: Reto) {
-        // Abre el dialogo de eliminar y lo elimina
+
         EliminarReto.showDialogoEliminarReto(
             context = requireContext(),
             reto = reto.descripcion
         ) {
-            val posicion = retos.indexOfFirst { it.id == reto.id }
-            if (posicion != -1) {
-                retos.removeAt(posicion)
-                retoAdapter.notifyItemRemoved(posicion)
-            }
+            // 1. En 'RetosRepository.kt', crear: suspend fun deleteReto(reto: Reto)
+            // 2. En 'RetoViewModel.kt', crear: fun deleteReto(reto: Reto)
+            // 3. Descomentar la línea de abajo para ejecutar la eliminación:
+            // retoViewModel.deleteReto(reto)
+
+            // Refresca la lista de la base de datos para ver el cambio
+            retoViewModel.getListReto()
         }
     }
 
@@ -107,6 +108,4 @@ class fragment_retos : Fragment() {
             findNavController().navigate(R.id.action_fragment_retos_to_home_principal24)
         }
     }
-}
-=======
 }

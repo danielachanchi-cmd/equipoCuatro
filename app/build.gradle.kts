@@ -1,14 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.example.equipocuatro"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.equipocuatro"
@@ -39,6 +36,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.generateKotlin", "true")
+}
+
 dependencies {
     val navVersion = "2.7.3"
     implementation(libs.androidx.activity.ktx)
@@ -61,4 +62,23 @@ dependencies {
 
     //cardView
     implementation("androidx.cardview:cardview:1.0.0")
+
+    //RecyclerView
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
+
+    //corrutinas
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    //viewmodel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("androidx.activity:activity-ktx:1.8.0")
+    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+
+    // LiveData
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+
+    // Room
+    implementation ("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 }
