@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -76,14 +77,9 @@ class fragment_retos : Fragment() {
             context = requireContext(),
             retoActual = reto.descripcion
         ) { descripcionEditada ->
-            //Guiate por como hice la función de crear reto y el video y el git del profe
-            // 1. En 'RetosRepository.kt', crear: suspend fun updateReto(reto: Reto)
-            // 2. En 'RetoViewModel.kt', crear: fun updateReto(reto: Reto)
-            // 3. Descomentar la línea de abajo para ejecutar la actualización:
-            // retoViewModel.updateReto(reto.copy(descripcion = descripcionEditada))
-
-            // Refresca la lista de la base de datos para ver el cambio
-            retoViewModel.getListReto()
+            retoViewModel.updateReto(reto.copy(descripcion = descripcionEditada)) { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -93,13 +89,9 @@ class fragment_retos : Fragment() {
             context = requireContext(),
             reto = reto.descripcion
         ) {
-            // 1. En 'RetosRepository.kt', crear: suspend fun deleteReto(reto: Reto)
-            // 2. En 'RetoViewModel.kt', crear: fun deleteReto(reto: Reto)
-            // 3. Descomentar la línea de abajo para ejecutar la eliminación:
-            // retoViewModel.deleteReto(reto)
-
-            // Refresca la lista de la base de datos para ver el cambio
-            retoViewModel.getListReto()
+            retoViewModel.deleteReto(reto) { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
