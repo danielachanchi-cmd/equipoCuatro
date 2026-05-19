@@ -45,4 +45,34 @@ class RetoViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+
+    fun updateReto(reto: Reto, message: (String) -> Unit) {
+        viewModelScope.launch {
+            _progesState.value = true
+            try {
+                retoRepository.updateReto(reto) { msg ->
+                    message(msg)
+                }
+                _listReto.value = retoRepository.getListReto()
+                _progesState.value = false
+            } catch (e: Exception) {
+                _progesState.value = false
+            }
+        }
+    }
+
+    fun deleteReto(reto: Reto, message: (String) -> Unit) {
+        viewModelScope.launch {
+            _progesState.value = true
+            try {
+                retoRepository.deleteReto(reto) { msg ->
+                    message(msg)
+                }
+                _listReto.value = retoRepository.getListReto()
+                _progesState.value = false
+            } catch (e: Exception) {
+                _progesState.value = false
+            }
+        }
+    }
 }
