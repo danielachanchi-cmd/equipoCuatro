@@ -31,7 +31,7 @@ class RetosRepository (val context: Context) {
     suspend fun updateReto(reto: Reto, messageResponse: (String) -> Unit) {
         try {
             withContext(Dispatchers.IO) {
-                ret oDao.updateReto(reto)
+                retoDao.updateReto(reto)
             }
             messageResponse("Reto actualizado correctamente")
         } catch (e: Exception) {
