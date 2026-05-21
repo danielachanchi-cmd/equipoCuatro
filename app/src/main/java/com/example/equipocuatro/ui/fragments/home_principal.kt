@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
 import com.example.equipocuatro.databinding.FragmentHomePrincipalBinding
@@ -19,7 +19,7 @@ class home_principal : Fragment() {
 
     private var _binding: FragmentHomePrincipalBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
@@ -44,11 +44,29 @@ class home_principal : Fragment() {
 
     private fun setupObservers() {
         viewModel.isMusicEnabled.observe(viewLifecycleOwner) { isEnabled ->
+            updateMusicState(isEnabled)
+        }
+    }
+
+    private fun updateMusicState(isEnabled: Boolean) {
+        mediaPlayer?.let { player ->
             if (isEnabled) {
-                mediaPlayer?.start()
+                if (!player.isPlaying) {
+                    try {
+                        player.start()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 binding.toolbarHome.volumeUpButton.setImageResource(R.drawable.volume_up)
             } else {
-                mediaPlayer?.pause()
+                if (player.isPlaying) {
+                    try {
+                        player.pause()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 binding.toolbarHome.volumeUpButton.setImageResource(R.drawable.volume_off)
             }
         }
@@ -126,9 +144,7 @@ class home_principal : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isMusicEnabled.value == true) {
-            mediaPlayer?.start()
-        }
+        updateMusicState(viewModel.isMusicEnabled.value ?: true)
     }
 
     override fun onDestroyView() {

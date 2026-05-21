@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
@@ -17,14 +18,15 @@ import com.example.equipocuatro.ui.dialogs.EditarReto
 import com.example.equipocuatro.ui.dialogs.EliminarReto
 import com.example.equipocuatro.model.Reto
 import com.example.equipocuatro.viewmodel.RetoViewModel
+import com.example.equipocuatro.viewmodel.HomeViewModel
 
 class fragment_retos : Fragment() {
 
     private lateinit var binding: FragmentRetosBinding
     private lateinit var retoAdapter: RetoAdapter
     private val retoViewModel: RetoViewModel by viewModels()
-    // Lista temporal de retos que se muestra en pantalla.
-    private val retos = mutableListOf<Reto>()
+    private val musicViewModel: HomeViewModel by activityViewModels()
+    private var musicaEstabaOn = false
 
 
     override fun onCreateView(
@@ -38,6 +40,13 @@ class fragment_retos : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        musicaEstabaOn = musicViewModel.isMusicEnabled.value == true
+
+        // Solo pausamos si estaba ON.
+        // Si estaba OFF, no tocamos nada y musicaEstabaOn se queda en false.
+        if (musicaEstabaOn) {
+            musicViewModel.toggleMusic() // Pasa a false
+        }
         configurarRecyclerView()
         retoViewModel.getListReto()
         retoViewModel.listReto.observe(viewLifecycleOwner){listaActualizada->
@@ -97,7 +106,13 @@ class fragment_retos : Fragment() {
 
     private fun volver(){
         binding.toolbarRetos.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_retos_to_home_principal24)
+            val musicaEstaAhoraOff = musicViewModel.isMusicEnabled.value == false
+
+
+            if (musicaEstabaOn && musicaEstaAhoraOff) {
+                musicViewModel.toggleMusic() // Esto la vuelve a poner en TRUE
+            }
+            findNavController().popBackStack()
         }
     }
 }
