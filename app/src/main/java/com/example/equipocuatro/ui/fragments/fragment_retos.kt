@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.equipocuatro.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.equipocuatro.databinding.FragmentRetosBinding
 import com.example.equipocuatro.ui.adapter.RetoAdapter
@@ -24,7 +23,7 @@ class fragment_retos : Fragment() {
 
     private lateinit var binding: FragmentRetosBinding
     private lateinit var retoAdapter: RetoAdapter
-    private val retoViewModel: RetoViewModel by viewModels()
+    private val retoViewModel: RetoViewModel by activityViewModels()
     private val musicViewModel: HomeViewModel by activityViewModels()
     private var musicaEstabaOn = false
 
@@ -40,32 +39,36 @@ class fragment_retos : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        musicaEstabaOn = musicViewModel.isMusicEnabled.value == true
-
-        // Solo pausamos si estaba ON.
-        // Si estaba OFF, no tocamos nada y musicaEstabaOn se queda en false.
-        if (musicaEstabaOn) {
-            musicViewModel.toggleMusic() // Pasa a false
-        }
+        controlarMusica()
         configurarRecyclerView()
-        retoViewModel.getListReto()
-        retoViewModel.listReto.observe(viewLifecycleOwner){listaActualizada->
-            retoAdapter.actualizarRetos(listaActualizada)
-        }
+        setupObservers()
         agregarReto()
         volver()
 
+        retoViewModel.getListReto()
+    }
+
+    private fun controlarMusica() {
+        musicaEstabaOn = musicViewModel.isMusicEnabled.value == true
+        if (musicaEstabaOn) {
+            musicViewModel.toggleMusic()
+        }
+    }
+
+    private fun setupObservers() {
+        observerProgress()
+        retoViewModel.listReto.observe(viewLifecycleOwner) { listaActualizada ->
+            retoAdapter.actualizarRetos(listaActualizada)
+        }
     }
 
     private fun configurarRecyclerView() {
-        // Configura el adapter y las acciones de editar/eliminar.
         retoAdapter = RetoAdapter(
             retos = mutableListOf(),
             onEditarClick = { reto -> mostrarDialogoEditar(reto) },
             onEliminarClick = { reto -> mostrarDialogoEliminar(reto) }
         )
 
-        // Conecta el RecyclerView con su layoutManager y adapter.
         binding.rvRetos.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = retoAdapter
@@ -110,9 +113,15 @@ class fragment_retos : Fragment() {
 
 
             if (musicaEstabaOn && musicaEstaAhoraOff) {
-                musicViewModel.toggleMusic() // Esto la vuelve a poner en TRUE
+                musicViewModel.toggleMusic() 
             }
             findNavController().popBackStack()
+        }
+    }
+
+    private fun observerProgress(){
+        retoViewModel.progresState.observe(viewLifecycleOwner){status ->
+            binding.progress.isVisible = status
         }
     }
 }
