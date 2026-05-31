@@ -9,17 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
 import com.example.equipocuatro.databinding.FragmentHomePrincipalBinding
 import com.example.equipocuatro.viewmodel.HomeViewModel
+import android.os.CountDownTimer
+
 
 class home_principal : Fragment() {
 
     private var _binding: FragmentHomePrincipalBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
@@ -30,11 +32,14 @@ class home_principal : Fragment() {
         return binding.root
     }
 
+    private var countdownTimer: CountDownTimer? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMediaPlayer()
         setupObservers()
         setupClickListeners()
+        startCountdown()
     }
 
     private fun setupMediaPlayer() {
@@ -44,11 +49,50 @@ class home_principal : Fragment() {
 
     private fun setupObservers() {
         viewModel.isMusicEnabled.observe(viewLifecycleOwner) { isEnabled ->
+            updateMusicState(isEnabled)
+        }
+    }
+
+    private fun startCountdown() {
+
+        countdownTimer = object : CountDownTimer(4000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                if (_binding != null) {
+                    val seconds = millisUntilFinished / 1000
+                    binding.txtNumero.text = seconds.toString()
+                }
+            }
+
+            override fun onFinish() {
+                if (_binding != null) {
+                    binding.txtNumero.text = "0"
+                }
+            }
+
+        }.start()
+    }
+
+
+    private fun updateMusicState(isEnabled: Boolean) {
+        mediaPlayer?.let { player ->
             if (isEnabled) {
-                mediaPlayer?.start()
+                if (!player.isPlaying) {
+                    try {
+                        player.start()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 binding.toolbarHome.volumeUpButton.setImageResource(R.drawable.volume_up)
             } else {
-                mediaPlayer?.pause()
+                if (player.isPlaying) {
+                    try {
+                        player.pause()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 binding.toolbarHome.volumeUpButton.setImageResource(R.drawable.volume_off)
             }
         }
@@ -126,13 +170,13 @@ class home_principal : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isMusicEnabled.value == true) {
-            mediaPlayer?.start()
-        }
+        updateMusicState(viewModel.isMusicEnabled.value ?: true)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        countdownTimer?.cancel()
+        countdownTimer = null
         mediaPlayer?.release()
         mediaPlayer = null
         _binding = null
