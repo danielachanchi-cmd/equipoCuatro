@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="3"
+        android:text="@string/_3"
         android:textColor="@color/orange"
         android:textSize="28sp"
         android:textStyle="bold"/>
@@ -58,4 +58,4 @@
 </FrameLayout>
 
 
-</FrameLayout>
+
