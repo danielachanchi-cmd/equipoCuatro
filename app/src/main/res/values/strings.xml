@@ -12,4 +12,10 @@
     <string name="cerrar">Cerrar</string>
     <string name="pokemon_aleatorio">Pokémon aleatorio</string>
     <string name="sin_retos_disponibles">No hay retos guardados. Agrega retos desde el menú para jugar.</string>
+    <string name="Titulo_Instrucciones">Reglas del Juego</string>
+    <string name="_3">3</string>
+    <string name="editar_reto">Editar reto</string>
+    <string name="Titulo_Eliminar">¿Desea eliminar el siguiente reto?</string>
+    <string name="no">NO</string>
+    <string name="si">SI</string>
 </resources>
