@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingBottom="28dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialogContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/bg_dialog_reto"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="64dp"
+        android:paddingBottom="40dp">
+
+        <FrameLayout
+            android:id="@+id/pokemonCircle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.28"
+            app:layout_constraintWidth_max="120dp"
+            app:layout_constraintWidth_min="80dp"
+            android:layout_marginTop="-55dp"
+            android:background="@drawable/bg_pokemon_circle"
+            android:clipChildren="false"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivPokemon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/pokemon_aleatorio"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvRetoAleatorio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pokemonCircle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnCerrarReto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="0dp"
+        android:backgroundTint="@color/orange"
+        android:minWidth="140dp"
+        android:text="@string/cerrar"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:translationY="20dp" />
+
+</FrameLayout>

@@ -3,7 +3,6 @@ package com.example.equipocuatro.ui.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.equipocuatro.R
-import com.example.equipocuatro.ui.fragments.home_principal
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

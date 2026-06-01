@@ -1,72 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#3B3B3B">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="#3B3B3B">
 
-        <!-- TOOLBAR -->
-        <include layout="@layout/toolbar_instrucciones" />
-
-        <!-- TITULO -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="20dp"
-            android:text="¿Cómo se juega?"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <!-- DESCRIPCION -->
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="4dp"
-            android:text="Los jugadores forman un círculo y en el centro colocan el dispositivo móvil, luego tocan el botón parpadeante para girar la botella. El jugador que señale la botella debe cumplir el reto que lanza la app, de lo contrario abandona el juego."
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
+            android:orientation="vertical">
 
-        <!-- TITULO -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="20dp"
-            android:text="¿Quién gana?"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            <!-- TOOLBAR -->
+            <include
+                android:id="@+id/toolbarInstrucciones"
+                layout="@layout/toolbar_instrucciones" />
 
-        <!-- DESCRIPCION -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="12dp"
-            android:text="Gana el último jugador que no abandone el juego."
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
+            <!-- TITULO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="20dp"
+                android:text="¿Cómo se juega?"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-        <!-- ANIMACION JSON -->
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="40dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/congratulations" />
+            <!-- DESCRIPCION -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp"
+                android:text="Los jugadores forman un círculo y en el centro colocan el dispositivo móvil, luego tocan el botón parpadeante para girar la botella. El jugador que señale la botella debe cumplir el reto que lanza la app, de lo contrario abandona el juego."
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
 
-    </LinearLayout>
+            <!-- TITULO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="20dp"
+                android:text="¿Quién gana?"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-</ScrollView>
+            <!-- DESCRIPCION -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:text="Gana el último jugador que no abandone el juego."
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+            <!-- ANIMACION JSON -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="40dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/congratulations" />
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

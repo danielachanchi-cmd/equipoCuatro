@@ -9,4 +9,7 @@
     <string name="botella">Botella</string>
     <string name="presioname">Presióname</string>
     <string name="plantilla_reto">Realiza un RecyclerView que liste una api de Pokemones</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="pokemon_aleatorio">Pokémon aleatorio</string>
+    <string name="sin_retos_disponibles">No hay retos guardados. Agrega retos desde el menú para jugar.</string>
 </resources>
