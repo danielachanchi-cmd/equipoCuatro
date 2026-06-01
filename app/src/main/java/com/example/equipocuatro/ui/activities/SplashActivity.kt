@@ -15,12 +15,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // Observamos el ViewModel para saber cuándo navegar
         viewModel.navigateToHome.observe(this) { shouldNavigate ->
             if (shouldNavigate) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                finish() // Cerramos el Splash para que no se pueda volver atrás (Criterio 5)
+                finish()
             }
         }
     }

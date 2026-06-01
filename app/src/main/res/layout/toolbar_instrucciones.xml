@@ -18,6 +18,7 @@
             android:src="@android:drawable/ic_media_previous"
             android:tint="#FF5A00" />
 
+</LinearLayout>
         <!-- TITULO -->
         <TextView
             android:layout_width="wrap_content"

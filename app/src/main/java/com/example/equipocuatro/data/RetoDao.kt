@@ -16,6 +16,9 @@ interface RetoDao {
     @Query("SELECT * FROM Reto ORDER BY id DESC")
     suspend fun getLisReto(): MutableList<Reto>
 
+    @Query("SELECT * FROM Reto ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomReto(): Reto?
+
     @Delete
     suspend fun deleteReto(reto: Reto): Int
 

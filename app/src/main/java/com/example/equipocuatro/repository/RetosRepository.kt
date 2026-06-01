@@ -28,6 +28,12 @@ class RetosRepository (val context: Context) {
         }
     }
 
+    suspend fun getRandomReto(): Reto? {
+        return withContext(Dispatchers.IO) {
+            retoDao.getRandomReto()
+        }
+    }
+
     suspend fun updateReto(reto: Reto, messageResponse: (String) -> Unit) {
         try {
             withContext(Dispatchers.IO) {

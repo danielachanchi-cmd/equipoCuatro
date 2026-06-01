@@ -81,4 +81,11 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
+
+    // Retrofit + Gson (API Pokémon HU 12)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coil (imágenes Pokémon)
+    implementation("io.coil-kt:coil:2.5.0")
 }

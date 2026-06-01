@@ -16,7 +16,6 @@ class Instrucciones : Fragment() {
     private lateinit var binding: FragmentInstruccionesBinding
     private val viewModel: HomeViewModel by activityViewModels()
 
-    // Guarda si la música estaba activa
     private var musicWasPlaying = false
 
     override fun onCreateView(
@@ -27,6 +26,19 @@ class Instrucciones : Fragment() {
         binding = FragmentInstruccionesBinding.inflate(inflater)
         binding.lifecycleOwner = this
         return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.cancelActiveGame()
+        pauseMusic()
+        setupClickListeners()
+    }
+
+    private fun pauseMusic() {
+        musicWasPlaying = viewModel.isMusicEnabled.value == true
+        if (musicWasPlaying) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +60,11 @@ class Instrucciones : Fragment() {
         }
     }
 
+    private fun setupClickListeners() {
+        binding.toolbarInstrucciones.btnBack.setOnClickListener {
+            if (musicWasPlaying) {
+                viewModel.toggleMusic()
+            }
     // Botón atrás
     private fun setupClickListeners() {
 
