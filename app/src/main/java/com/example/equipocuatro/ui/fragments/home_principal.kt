@@ -16,12 +16,15 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.RotateAnimation
 import androidx.fragment.app.Fragment
+
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
 import com.example.equipocuatro.databinding.FragmentHomePrincipalBinding
 import com.example.equipocuatro.ui.dialogs.MostrarRetoAleatorio
 import com.example.equipocuatro.viewmodel.HomeViewModel
+import android.os.CountDownTimer
+
 
 class home_principal : Fragment() {
 
@@ -42,6 +45,8 @@ class home_principal : Fragment() {
         return binding.root
     }
 
+    private var countdownTimer: CountDownTimer? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.txtNumero.visibility = View.GONE
@@ -50,6 +55,8 @@ class home_principal : Fragment() {
         setupObservers()
         setupClickListeners()
         setupSpinButton()
+
+        startCountdown()
     }
 
     private fun setupMediaPlayer() {
@@ -160,6 +167,30 @@ class home_principal : Fragment() {
 
         binding.imgBotella.startAnimation(rotate)
     }
+            updateMusicState(isEnabled)
+        }
+    }
+
+    private fun startCountdown() {
+
+        countdownTimer = object : CountDownTimer(4000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                if (_binding != null) {
+                    val seconds = millisUntilFinished / 1000
+                    binding.txtNumero.text = seconds.toString()
+                }
+            }
+
+            override fun onFinish() {
+                if (_binding != null) {
+                    binding.txtNumero.text = "0"
+                }
+            }
+
+        }.start()
+    }
+
 
     private fun updateMusicState(isEnabled: Boolean) {
         mediaPlayer?.let { player ->
@@ -296,6 +327,9 @@ class home_principal : Fragment() {
         super.onDestroyView()
         binding.imgBotella.clearAnimation()
         stopSpinSound()
+
+        countdownTimer?.cancel()
+        countdownTimer = null
         mediaPlayer?.release()
         mediaPlayer = null
         _binding = null

@@ -18,6 +18,7 @@ import com.example.equipocuatro.ui.dialogs.EditarReto
 import com.example.equipocuatro.ui.dialogs.EliminarReto
 import com.example.equipocuatro.viewmodel.HomeViewModel
 import com.example.equipocuatro.viewmodel.RetoViewModel
+import com.example.equipocuatro.viewmodel.HomeViewModel
 
 class fragment_retos : Fragment() {
 
@@ -26,6 +27,7 @@ class fragment_retos : Fragment() {
     private val retoViewModel: RetoViewModel by activityViewModels()
     private val musicViewModel: HomeViewModel by activityViewModels()
     private var musicaEstabaOn = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,11 +41,15 @@ class fragment_retos : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         musicViewModel.cancelActiveGame()
+
         controlarMusica()
         configurarRecyclerView()
         setupObservers()
         agregarReto()
         volver()
+        retoViewModel.getListReto()
+    }
+
         retoViewModel.getListReto()
     }
 
@@ -109,6 +115,10 @@ class fragment_retos : Fragment() {
             val musicaEstaAhoraOff = musicViewModel.isMusicEnabled.value == false
             if (musicaEstabaOn && musicaEstaAhoraOff) {
                 musicViewModel.toggleMusic()
+
+
+            if (musicaEstabaOn && musicaEstaAhoraOff) {
+                musicViewModel.toggleMusic() 
             }
             findNavController().popBackStack()
         }
@@ -116,6 +126,8 @@ class fragment_retos : Fragment() {
 
     private fun observerProgress() {
         retoViewModel.progresState.observe(viewLifecycleOwner) { status ->
+    private fun observerProgress(){
+        retoViewModel.progresState.observe(viewLifecycleOwner){status ->
             binding.progress.isVisible = status
         }
     }
