@@ -15,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        viewModel.navigateToHome.observe(this) { shouldNavigate ->
+        viewModel.navigateToLogin.observe(this) { shouldNavigate ->
             if (shouldNavigate) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
