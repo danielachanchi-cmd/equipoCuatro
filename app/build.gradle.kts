@@ -41,6 +41,7 @@ ksp {
 }
 
 dependencies {
+    implementation(libs.androidx.annotation)
     implementation(libs.volley)
     val navVersion = "2.7.3"
     implementation(libs.androidx.activity.ktx)
