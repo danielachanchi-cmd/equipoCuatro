@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel : ViewModel() {
 
-    private val _navigateToHome = MutableLiveData<Boolean>()
-    val navigateToHome: LiveData<Boolean> get() = _navigateToHome
+    private val _navigateToLogin = MutableLiveData<Boolean>()
+    val navigateToLogin: LiveData<Boolean> get() = _navigateToLogin
 
     init {
         startTimer()
@@ -19,7 +19,7 @@ class SplashViewModel : ViewModel() {
     private fun startTimer() {
         viewModelScope.launch {
             delay(5000) // 5 segundos
-            _navigateToHome.value = true
+            _navigateToLogin.value = true
         }
     }
 }
