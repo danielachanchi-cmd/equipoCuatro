@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.equipocuatro.model.Reto
 
+
 @Dao
 interface RetoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -23,7 +23,9 @@ import com.example.equipocuatro.databinding.FragmentHomePrincipalBinding
 import com.example.equipocuatro.ui.dialogs.MostrarRetoAleatorio
 import com.example.equipocuatro.viewmodel.HomeViewModel
 import android.os.CountDownTimer
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class home_principal : Fragment() {
 
     private var _binding: FragmentHomePrincipalBinding? = null
@@ -130,7 +132,7 @@ class home_principal : Fragment() {
 
         viewModel.challengeDialog.observe(viewLifecycleOwner) { data ->
             data?.let {
-                MostrarRetoAleatorio.showDialogoRetoAleatorio(requireContext(), it)
+                MostrarRetoAleatorio.showDialogoRetoAleatorio(requireContext(), it, viewModel)
             }
         }
     }
