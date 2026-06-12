@@ -6,11 +6,11 @@ import com.example.equipocuatro.data.RetoDao
 import com.example.equipocuatro.model.Reto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RetosRepository (val context: Context) {
-
-    private var retoDao:RetoDao = RetoDB.getDatabase(context).retoDao()
-
+class RetosRepository @Inject constructor(
+    private val retoDao: RetoDao
+) {
     suspend fun saveReto(reto: Reto, messageResponse: (String)-> Unit){
         try{
             withContext(Dispatchers.IO){

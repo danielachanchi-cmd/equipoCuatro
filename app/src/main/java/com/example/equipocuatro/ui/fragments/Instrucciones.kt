@@ -10,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.databinding.FragmentInstruccionesBinding
 
 import com.example.equipocuatro.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class Instrucciones : Fragment() {
 
     private lateinit var binding: FragmentInstruccionesBinding

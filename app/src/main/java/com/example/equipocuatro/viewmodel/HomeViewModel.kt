@@ -4,28 +4,33 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.equipocuatro.model.ChallengeDialogData
 import com.example.equipocuatro.repository.PokemonRepository
 import com.example.equipocuatro.repository.RetosRepository
 import coil.imageLoader
 import coil.request.ImageRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.random.Random
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    application: Application,
+    private val retosRepository: RetosRepository,
+    private val pokemonRepository: PokemonRepository
+) : AndroidViewModel(application){
 
     companion object {
         const val SPIN_DURATION_MS = 4000L
         const val COUNTDOWN_INTERVAL_MS = 1000L
         const val COUNTDOWN_ZERO_HOLD_MS = 800L
     }
-
-    private val retosRepository = RetosRepository(application)
-    private val pokemonRepository = PokemonRepository()
 
     private val _isMusicEnabled = MutableLiveData(true)
     val isMusicEnabled: LiveData<Boolean> = _isMusicEnabled

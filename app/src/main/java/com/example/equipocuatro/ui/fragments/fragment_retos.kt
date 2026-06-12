@@ -18,7 +18,9 @@ import com.example.equipocuatro.ui.dialogs.EliminarReto
 import com.example.equipocuatro.model.Reto
 import com.example.equipocuatro.viewmodel.RetoViewModel
 import com.example.equipocuatro.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class fragment_retos : Fragment() {
 
     private lateinit var binding: FragmentRetosBinding
@@ -77,7 +79,7 @@ class fragment_retos : Fragment() {
 
     private fun agregarReto(){
         binding.btnAgregar.setOnClickListener {
-            AgregarReto.showDialgoAgregarReto(requireContext()){
+            AgregarReto.showDialgoAgregarReto(requireContext(), retoViewModel) {
                 retoViewModel.getListReto()
             }
         }
