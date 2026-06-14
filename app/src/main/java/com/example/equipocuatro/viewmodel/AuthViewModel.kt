@@ -39,4 +39,8 @@ class AuthViewModel @Inject constructor(
     fun isUserLoggedIn(): Boolean {
         return repository.getCurrentUser() != null
     }
+
+    fun signOut() {
+        repository.signOut()
+    }
 }

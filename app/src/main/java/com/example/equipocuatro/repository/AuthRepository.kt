@@ -20,4 +20,5 @@ class AuthRepository @Inject constructor(
 
     fun getCurrentUser() = dataSource.getCurrentUsers()
 
+    fun signOut() = dataSource.signOut()
 }

@@ -16,4 +16,6 @@ class AuthDataSource @Inject constructor(
         db.collection("users").document(uid).set(mapOf("email" to email)).await()
 
     fun getCurrentUsers() = auth.currentUser
+
+    fun signOut() = auth.signOut()
 }
