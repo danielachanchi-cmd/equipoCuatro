@@ -24,13 +24,20 @@ class RetoViewModel @Inject constructor(
     private val _progesState = MutableLiveData(false)
     val progresState: LiveData<Boolean> = _progesState
 
-    fun saveReto(reto: Reto, message:(String)->Unit){
+    fun saveReto(reto: Reto, message:(String, Boolean)->Unit){
         viewModelScope.launch {
             _progesState.value = true
             try {
-                retoRepository.saveReto(reto){msg ->
-                    message(msg)
+                var responseMessage = ""
+                var responseSuccess = false
+                retoRepository.saveReto(reto){msg, success ->
+                    responseMessage = msg
+                    responseSuccess = success
                 }
+                if (responseSuccess) {
+                    _listReto.value = retoRepository.getListReto()
+                }
+                message(responseMessage, responseSuccess)
                 _progesState.value = false
             }catch (e: Exception){
                 _progesState.value = false
