@@ -81,6 +81,9 @@ class login_registro_fragment : Fragment() {
         }
     }
 
+    // HU-2.0 C10 P2:
+    // Obtiene las credenciales ingresadas por el usuario
+    // y solicita la autenticación mediante AuthViewModel.
     private fun login() {
 
         binding.btnLogin.setOnClickListener {
