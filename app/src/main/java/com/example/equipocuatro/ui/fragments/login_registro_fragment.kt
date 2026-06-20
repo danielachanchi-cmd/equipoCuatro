@@ -78,7 +78,7 @@ class login_registro_fragment : Fragment() {
     private fun validadrCampos(){
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
-        val esValido = email.isNotEmpty() && password.length >= 6
+        val esValido = email.isNotEmpty() && password.length in 6..10
 
         binding.tvRegister.apply {
             isEnabled = esValido
@@ -94,11 +94,43 @@ class login_registro_fragment : Fragment() {
         }
     }
 
+    private fun validarPasswordHU25() {
+
+        val password = binding.etPassword.text.toString()
+
+        when {
+
+            password.isEmpty() -> {
+                binding.tvPasswordError.visibility = View.GONE
+
+                binding.tilPassword.boxStrokeColor =
+                    ContextCompat.getColor(requireContext(), android.R.color.white)
+            }
+
+            password.length < 6 -> {
+
+                binding.tvPasswordError.visibility = View.VISIBLE
+
+                binding.tilPassword.boxStrokeColor =
+                    ContextCompat.getColor(requireContext(), android.R.color.holo_red_light)
+            }
+
+            else -> {
+
+                binding.tvPasswordError.visibility = View.GONE
+
+                binding.tilPassword.boxStrokeColor =
+                    ContextCompat.getColor(requireContext(), android.R.color.white)
+            }
+        }
+    }
+
     private fun setupListeners() {
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 validadrCampos()
+                validarPasswordHU25()
             }
             override fun afterTextChanged(s: Editable?) {}
         }
