@@ -94,14 +94,24 @@ class login_registro_fragment : Fragment() {
         }
         //Deshabilitar boton login
         binding.btnLogin.isEnabled =
-            email.isNotEmpty() && password.isNotEmpty()
-        
+            email.isNotEmpty() && password.length in 6..10
+
         //Habilitarse y color blanco
         if (binding.btnLogin.isEnabled) {
+
             binding.btnLogin.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.white)
             )
+
             binding.btnLogin.setTypeface(null, Typeface.BOLD)
+
+        } else {
+
+            binding.btnLogin.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.gray_text)
+            )
+
+            binding.btnLogin.setTypeface(null, Typeface.NORMAL)
         }
     }
 
