@@ -35,6 +35,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    // HU-2.0 C10 P2:
+    // Valida las credenciales con Firebase Authentication.
+    // Si el login es exitoso se envía Resource.Success para permitir
+    // la navegación a la ventana Home Principal.
     fun login(email: String, pass: String){
         viewModelScope.launch {
             _res.postValue(Resource.Loading)
