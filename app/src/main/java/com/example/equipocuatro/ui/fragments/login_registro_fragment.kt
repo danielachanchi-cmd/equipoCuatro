@@ -92,6 +92,8 @@ class login_registro_fragment : Fragment() {
                 setTypeface(null, Typeface.NORMAL)
             }
         }
+        binding.btnLogin.isEnabled =
+            email.isNotEmpty() && password.isNotEmpty()
     }
 
     private fun validarPasswordHU25() {
