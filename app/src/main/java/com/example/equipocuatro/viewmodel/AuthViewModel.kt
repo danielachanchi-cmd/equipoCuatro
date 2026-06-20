@@ -8,7 +8,6 @@ import com.example.equipocuatro.repository.AuthRepository
 import com.example.equipocuatro.utils.Resource
 import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +31,24 @@ class AuthViewModel @Inject constructor(
                 }
             }catch (e: Exception){
                 _res.postValue(Resource.Error(e.message ?: "Error desconocido"))
+            }
+        }
+    }
+
+    fun login(email: String, pass: String){
+        viewModelScope.launch {
+            _res.postValue(Resource.Loading)
+
+            try {
+                val authResult = repository.login(email, pass)
+
+                if (authResult != null) {
+                    _res.postValue(Resource.Success(authResult))
+                } else {
+                    _res.postValue(Resource.Error("Login incorrecto"))
+                }
+            }catch (e: Exception){
+                _res.postValue(Resource.Error(e.message ?: "Login incorrecto"))
             }
         }
     }

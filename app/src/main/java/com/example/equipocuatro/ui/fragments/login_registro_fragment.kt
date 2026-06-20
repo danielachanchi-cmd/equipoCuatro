@@ -44,6 +44,7 @@ class login_registro_fragment : Fragment() {
         setupListeners()
         validadrCampos()
         registrar()
+        login()
     }
 
     private fun registrar(){
@@ -71,6 +72,34 @@ class login_registro_fragment : Fragment() {
                     binding.tvRegister.alpha = 1f
                     Toast.makeText(requireContext(),"Error en el registro", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+    }
+
+    private fun login() {
+
+        binding.btnLogin.setOnClickListener {
+
+            val email = binding.etEmail.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
+
+            authViewModel.login(email, password)
+        }
+
+        authViewModel.res.observe(viewLifecycleOwner) { resource ->
+
+            when(resource){
+
+                is Resource.Error -> {
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Login incorrecto",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                else -> {}
             }
         }
     }

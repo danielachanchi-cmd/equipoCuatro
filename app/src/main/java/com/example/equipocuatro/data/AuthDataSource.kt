@@ -18,4 +18,7 @@ class AuthDataSource @Inject constructor(
     fun getCurrentUsers() = auth.currentUser
 
     fun signOut() = auth.signOut()
+
+    suspend fun loginWithFirebase(email: String, pass: String) =
+        auth.signInWithEmailAndPassword(email, pass).await()
 }
