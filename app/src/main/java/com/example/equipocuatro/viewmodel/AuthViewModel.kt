@@ -30,7 +30,7 @@ class AuthViewModel @Inject constructor(
                     _res.postValue(Resource.Success(authResult))
                 }
             }catch (e: Exception){
-                _res.postValue(Resource.Error(e.message ?: "Error desconocido"))
+                _res.postValue(Resource.Error("Error en el registro"))
             }
         }
     }
@@ -48,7 +48,7 @@ class AuthViewModel @Inject constructor(
                     _res.postValue(Resource.Error("Login incorrecto"))
                 }
             }catch (e: Exception){
-                _res.postValue(Resource.Error(e.message ?: "Login incorrecto"))
+                _res.postValue(Resource.Error("Login incorrecto"))
             }
         }
     }
