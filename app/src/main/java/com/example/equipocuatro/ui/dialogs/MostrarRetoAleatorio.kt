@@ -18,9 +18,9 @@ class MostrarRetoAleatorio {
     companion object {
         fun showDialogoRetoAleatorio(
             context: Context,
-            data: ChallengeDialogData
+            data: ChallengeDialogData,
+            homeViewModel: HomeViewModel
         ) {
-            val homeViewModel = ViewModelProvider(context as AppCompatActivity)[HomeViewModel::class.java]
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_mostrar_reto_aleatorio, null)
             val tvReto = view.findViewById<TextView>(R.id.tvRetoAleatorio)
             val ivPokemon = view.findViewById<ImageView>(R.id.ivPokemon)

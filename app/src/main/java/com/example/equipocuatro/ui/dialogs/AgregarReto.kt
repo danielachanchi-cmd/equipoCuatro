@@ -18,10 +18,10 @@ class AgregarReto {
 
         fun showDialgoAgregarReto(
             context: Context,
+            retoViewModel: RetoViewModel,
             onGuardar:() -> Unit
 
         ){
-            val retoViewModel = ViewModelProvider(context as AppCompatActivity).get(RetoViewModel::class.java)
             val inflater = LayoutInflater.from(context)
             val binding = DialogAgregarRetoBinding.inflate(inflater)
 

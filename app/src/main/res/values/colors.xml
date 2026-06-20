@@ -3,10 +3,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="dark_gray">#333333</color>
-    <color name="orange">#FF5722</color>
+    <color name="orange">#FF3D00</color>
     <color name="gray_divider">#CCCCCC</color>
     <color name="Green_edit">#147C5E</color>
     <color name="Red_delete">#B00020</color>
     <color name="gray_disabled">#D3D3D3</color>
     <color name="text_color">#555555</color>
+    <color name="gray_text">#9EA1A1</color>
 </resources>

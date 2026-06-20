@@ -4,13 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SplashViewModel : ViewModel() {
+@HiltViewModel
+class SplashViewModel @Inject constructor(): ViewModel() {
 
-    private val _navigateToHome = MutableLiveData<Boolean>()
-    val navigateToHome: LiveData<Boolean> get() = _navigateToHome
+    private val _navigateToLogin = MutableLiveData<Boolean>()
+    val navigateToLogin: LiveData<Boolean> get() = _navigateToLogin
 
     init {
         startTimer()
@@ -19,7 +22,7 @@ class SplashViewModel : ViewModel() {
     private fun startTimer() {
         viewModelScope.launch {
             delay(5000) // 5 segundos
-            _navigateToHome.value = true
+            _navigateToLogin.value = true
         }
     }
 }

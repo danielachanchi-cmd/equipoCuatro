@@ -10,7 +10,7 @@
         android:id="@+id/tvTitleEditDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Editar reto"
+        android:text="@string/editar_reto"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -41,7 +41,7 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="@color/orange"
-            android:text="Cancelar"
+            android:text="@string/cancelar"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
@@ -52,7 +52,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:backgroundTint="@color/orange"
-            android:text="Guardar"
+            android:text="@string/guardar"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 

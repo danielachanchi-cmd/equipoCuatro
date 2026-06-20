@@ -16,26 +16,29 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.RotateAnimation
 import androidx.fragment.app.Fragment
-
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
 import com.example.equipocuatro.databinding.FragmentHomePrincipalBinding
 import com.example.equipocuatro.ui.dialogs.MostrarRetoAleatorio
+import com.example.equipocuatro.viewmodel.AuthViewModel
 import com.example.equipocuatro.viewmodel.HomeViewModel
 import android.os.CountDownTimer
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class home_principal : Fragment() {
 
     private var _binding: FragmentHomePrincipalBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by activityViewModels()
     private var mediaPlayer: MediaPlayer? = null
     private var spinPlayer: MediaPlayer? = null
     private var toneGenerator: ToneGenerator? = null
     private val spinToneHandler = Handler(Looper.getMainLooper())
     private var spinToneRunnable: Runnable? = null
+    private var countdownTimer: CountDownTimer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +48,6 @@ class home_principal : Fragment() {
         return binding.root
     }
 
-    private var countdownTimer: CountDownTimer? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.txtNumero.visibility = View.GONE
@@ -55,7 +56,6 @@ class home_principal : Fragment() {
         setupObservers()
         setupClickListeners()
         setupSpinButton()
-
         startCountdown()
     }
 
@@ -134,7 +134,7 @@ class home_principal : Fragment() {
 
         viewModel.challengeDialog.observe(viewLifecycleOwner) { data ->
             data?.let {
-                MostrarRetoAleatorio.showDialogoRetoAleatorio(requireContext(), it)
+                MostrarRetoAleatorio.showDialogoRetoAleatorio(requireContext(), it, viewModel)
             }
         }
     }
@@ -167,14 +167,9 @@ class home_principal : Fragment() {
 
         binding.imgBotella.startAnimation(rotate)
     }
-            updateMusicState(isEnabled)
-        }
-    }
 
     private fun startCountdown() {
-
         countdownTimer = object : CountDownTimer(4000, 1000) {
-
             override fun onTick(millisUntilFinished: Long) {
                 if (_binding != null) {
                     val seconds = millisUntilFinished / 1000
@@ -187,10 +182,8 @@ class home_principal : Fragment() {
                     binding.txtNumero.text = "0"
                 }
             }
-
         }.start()
     }
-
 
     private fun updateMusicState(isEnabled: Boolean) {
         mediaPlayer?.let { player ->
@@ -305,6 +298,13 @@ class home_principal : Fragment() {
                 startActivity(shareIntent)
             }
         }
+
+        binding.toolbarHome.logoutButton.setOnClickListener {
+            it.startTouchAnimation {
+                authViewModel.signOut()
+                findNavController().navigate(R.id.action_home_principal2_to_login_registro_fragment)
+            }
+        }
     }
 
     override fun onPause() {
@@ -327,7 +327,6 @@ class home_principal : Fragment() {
         super.onDestroyView()
         binding.imgBotella.clearAnimation()
         stopSpinSound()
-
         countdownTimer?.cancel()
         countdownTimer = null
         mediaPlayer?.release()

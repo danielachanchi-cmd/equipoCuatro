@@ -11,15 +11,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.equipocuatro.databinding.FragmentRetosBinding
-import com.example.equipocuatro.model.Reto
 import com.example.equipocuatro.ui.adapter.RetoAdapter
 import com.example.equipocuatro.ui.dialogs.AgregarReto
 import com.example.equipocuatro.ui.dialogs.EditarReto
 import com.example.equipocuatro.ui.dialogs.EliminarReto
-import com.example.equipocuatro.viewmodel.HomeViewModel
+import com.example.equipocuatro.model.Reto
 import com.example.equipocuatro.viewmodel.RetoViewModel
 import com.example.equipocuatro.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class fragment_retos : Fragment() {
 
     private lateinit var binding: FragmentRetosBinding
@@ -40,15 +41,11 @@ class fragment_retos : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        musicViewModel.cancelActiveGame()
-
         controlarMusica()
         configurarRecyclerView()
         setupObservers()
         agregarReto()
         volver()
-        retoViewModel.getListReto()
-    }
 
         retoViewModel.getListReto()
     }
@@ -80,15 +77,16 @@ class fragment_retos : Fragment() {
         }
     }
 
-    private fun agregarReto() {
+    private fun agregarReto(){
         binding.btnAgregar.setOnClickListener {
-            AgregarReto.showDialgoAgregarReto(requireContext()) {
+            AgregarReto.showDialgoAgregarReto(requireContext(), retoViewModel) {
                 retoViewModel.getListReto()
             }
         }
     }
 
     private fun mostrarDialogoEditar(reto: Reto) {
+
         EditarReto.showDialogoEditarReto(
             context = requireContext(),
             retoActual = reto.descripcion
@@ -100,6 +98,7 @@ class fragment_retos : Fragment() {
     }
 
     private fun mostrarDialogoEliminar(reto: Reto) {
+
         EliminarReto.showDialogoEliminarReto(
             context = requireContext(),
             reto = reto.descripcion
@@ -110,22 +109,16 @@ class fragment_retos : Fragment() {
         }
     }
 
-    private fun volver() {
+    private fun volver(){
         binding.toolbarRetos.btnBack.setOnClickListener {
             val musicaEstaAhoraOff = musicViewModel.isMusicEnabled.value == false
             if (musicaEstabaOn && musicaEstaAhoraOff) {
                 musicViewModel.toggleMusic()
-
-
-            if (musicaEstabaOn && musicaEstaAhoraOff) {
-                musicViewModel.toggleMusic() 
             }
             findNavController().popBackStack()
         }
     }
 
-    private fun observerProgress() {
-        retoViewModel.progresState.observe(viewLifecycleOwner) { status ->
     private fun observerProgress(){
         retoViewModel.progresState.observe(viewLifecycleOwner){status ->
             binding.progress.isVisible = status

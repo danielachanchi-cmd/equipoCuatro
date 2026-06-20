@@ -10,7 +10,7 @@
         android:id="@+id/tvTitleDeleteDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="¿Desea eliminar el siguiente reto?"
+        android:text="@string/Titulo_Eliminar"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -39,7 +39,7 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="@color/orange"
-            android:text="NO"
+            android:text="@string/no"
             android:textColor="@color/white" />
 
         <Button
@@ -49,7 +49,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:backgroundTint="@color/orange"
-            android:text="SI"
+            android:text="@string/si"
             android:textColor="@color/white" />
 
     </LinearLayout>

@@ -6,7 +6,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.equipocuatro.R
 import com.example.equipocuatro.viewmodel.SplashViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     private val viewModel: SplashViewModel by viewModels()
@@ -15,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        viewModel.navigateToHome.observe(this) { shouldNavigate ->
+        viewModel.navigateToLogin.observe(this) { shouldNavigate ->
             if (shouldNavigate) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

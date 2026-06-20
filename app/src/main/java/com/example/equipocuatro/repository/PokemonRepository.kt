@@ -4,9 +4,10 @@ import com.example.equipocuatro.data.RetrofitClient
 import com.example.equipocuatro.model.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.random.Random
 
-class PokemonRepository {
+class PokemonRepository @Inject constructor() {
 
     private var cachedPokemon: List<Pokemon>? = null
 
