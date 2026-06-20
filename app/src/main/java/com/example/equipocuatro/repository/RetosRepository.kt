@@ -55,25 +55,25 @@ class RetosRepository @Inject constructor(
         }
     }
 
-    suspend fun updateReto(reto: Reto, messageResponse: (String) -> Unit) {
+    suspend fun updateReto(reto: Reto): Result<Unit> {
         try {
             withContext(Dispatchers.IO) {
                 retosCollection.document(reto.id.toString()).set(reto).await()
             }
-            messageResponse("Reto actualizado correctamente")
+            return Result.success(Unit)
         } catch (e: Exception) {
-            messageResponse("Error al actualizar el reto: ${e.message}")
+            return Result.failure(e)
         }
     }
 
-    suspend fun deleteReto(reto: Reto, messageResponse: (String) -> Unit) {
-        try {
+    suspend fun deleteReto(reto: Reto): Result<Unit> {
+        return try {
             withContext(Dispatchers.IO) {
                 retosCollection.document(reto.id.toString()).delete().await()
             }
-            messageResponse("Reto eliminado correctamente")
+            Result.success(Unit)
         } catch (e: Exception) {
-            messageResponse("Error al eliminar el reto: ${e.message}")
+            Result.failure(e)
         }
     }
 

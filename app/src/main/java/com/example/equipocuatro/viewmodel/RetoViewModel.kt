@@ -57,31 +57,41 @@ class RetoViewModel @Inject constructor(
         }
     }
 
-    fun updateReto(reto: Reto, message: (String) -> Unit) {
+    fun updateReto(reto: Reto, message: (String, Boolean) -> Unit) {
         viewModelScope.launch {
             _progesState.value = true
             try {
-                retoRepository.updateReto(reto) { msg ->
-                    message(msg)
+                val result = retoRepository.updateReto(reto)
+                if (result.isSuccess) {
+                    _listReto.value = retoRepository.getListReto()
+                    message("Reto actualizado correctamente", true)
+                } else {
+                    val error = result.exceptionOrNull()?.message.orEmpty()
+                    message("Error al actualizar el reto: $error", false)
                 }
-                _listReto.value = retoRepository.getListReto()
-                _progesState.value = false
             } catch (e: Exception) {
+                message("Error al actualizar el reto: ${e.message}", false)
+            } finally {
                 _progesState.value = false
             }
         }
     }
 
-    fun deleteReto(reto: Reto, message: (String) -> Unit) {
+    fun deleteReto(reto: Reto, message: (String, Boolean) -> Unit) {
         viewModelScope.launch {
             _progesState.value = true
             try {
-                retoRepository.deleteReto(reto) { msg ->
-                    message(msg)
+                val result = retoRepository.deleteReto(reto)
+                if (result.isSuccess) {
+                    _listReto.value = retoRepository.getListReto()
+                    message("Reto eliminado correctamente", true)
+                } else {
+                    val error = result.exceptionOrNull()?.message.orEmpty()
+                    message("Error al eliminar el reto: $error", false)
                 }
-                _listReto.value = retoRepository.getListReto()
-                _progesState.value = false
             } catch (e: Exception) {
+                message("Error al eliminar el reto: ${e.message}", false)
+            } finally {
                 _progesState.value = false
             }
         }

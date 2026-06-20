@@ -14,7 +14,7 @@ class EditarReto {
         fun showDialogoEditarReto(
             context: Context,
             retoActual: String = "",
-            onGuardar: (String) -> Unit = {}
+            onGuardar: (String, (Boolean) -> Unit) -> Unit
         ) {
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_editar_reto, null)
             val etRetoEdit = view.findViewById<EditText>(R.id.etRetoEdit)
@@ -45,8 +45,14 @@ class EditarReto {
             btnGuardarEdit.setOnClickListener {
                 val retoEditado = etRetoEdit.text.toString().trim()
                 if (retoEditado.isNotEmpty()) {
-                    onGuardar(retoEditado)
-                    alertDialog.dismiss()
+                    btnGuardarEdit.isEnabled = false
+                    onGuardar(retoEditado) { guardadoExitoso ->
+                        if (guardadoExitoso) {
+                            alertDialog.dismiss()
+                        } else {
+                            actualizarBotonGuardar()
+                        }
+                    }
                 }
             }
 
