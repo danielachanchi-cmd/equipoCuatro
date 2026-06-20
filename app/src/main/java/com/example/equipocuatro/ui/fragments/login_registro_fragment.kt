@@ -92,8 +92,17 @@ class login_registro_fragment : Fragment() {
                 setTypeface(null, Typeface.NORMAL)
             }
         }
+        //Deshabilitar boton login
         binding.btnLogin.isEnabled =
             email.isNotEmpty() && password.isNotEmpty()
+        
+        //Habilitarse y color blanco
+        if (binding.btnLogin.isEnabled) {
+            binding.btnLogin.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.white)
+            )
+            binding.btnLogin.setTypeface(null, Typeface.BOLD)
+        }
     }
 
     private fun validarPasswordHU25() {
