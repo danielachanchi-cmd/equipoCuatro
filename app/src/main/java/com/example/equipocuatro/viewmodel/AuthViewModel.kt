@@ -36,6 +36,19 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun login(email: String, pass: String){
+        viewModelScope.launch {
+            _res.postValue(Resource.Loading)
+
+            try {
+                val authResult = repository.login(email, pass)
+                _res.postValue(Resource.Success(authResult))
+            }catch (e: Exception){
+                _res.postValue(Resource.Error(e.message ?: "Login incorrecto"))
+            }
+        }
+    }
+
     fun isUserLoggedIn(): Boolean {
         return repository.getCurrentUser() != null
     }
