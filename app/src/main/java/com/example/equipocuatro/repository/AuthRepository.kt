@@ -1,6 +1,7 @@
 package com.example.equipocuatro.repository
 
 import com.example.equipocuatro.data.AuthDataSource
+import com.example.equipocuatro.model.UserRequest
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,8 +11,8 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val dataSource: AuthDataSource
 ){
-    suspend fun register(email: String, pass: String): AuthResult? {
-        return dataSource.registerWithFirebase(email,pass)
+    suspend fun register(userRequest: UserRequest): AuthResult? {
+        return dataSource.registerWithFirebase(userRequest)
     }
 
     suspend fun createUserInFirestore(uid: String, email: String) {
