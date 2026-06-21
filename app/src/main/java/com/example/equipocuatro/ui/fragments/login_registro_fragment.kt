@@ -1,38 +1,46 @@
-package com.example.equipocuatro.ui.activities
+package com.example.equipocuatro.ui.fragments
 
-import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.equipocuatro.R
-import com.example.equipocuatro.databinding.ActivityLoginRegistroBinding
-import com.example.equipocuatro.model.UserRequest
+import com.example.equipocuatro.databinding.FragmentLoginRegistroFragmentBinding
 import com.example.equipocuatro.utils.Resource
 import com.example.equipocuatro.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class activity_login_registro : AppCompatActivity() {
+class login_registro_fragment : Fragment() {
 
-    private  lateinit var binding: ActivityLoginRegistroBinding
+    private  lateinit var binding: FragmentLoginRegistroFragmentBinding
     private val authViewModel: AuthViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentLoginRegistroFragmentBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        return  binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (authViewModel.isUserLoggedIn()) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
+            findNavController().navigate(R.id.action_login_registro_fragment_to_home_principal2)
         }
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login_registro)
         setupListeners()
         validadrCampos()
         registrar()
@@ -43,10 +51,9 @@ class activity_login_registro : AppCompatActivity() {
         binding.tvRegister.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
-            val userRequest = UserRequest(email,password)
-            authViewModel.register(userRequest)
+            authViewModel.register(email,password)
         }
-        authViewModel.res.observe(this){resource ->
+        authViewModel.res.observe(viewLifecycleOwner){resource ->
             when(resource){
                 is Resource.Loading->{
                     binding.progress.visibility = View.VISIBLE
@@ -57,16 +64,18 @@ class activity_login_registro : AppCompatActivity() {
                     binding.progress.visibility = View.GONE
                     binding.tvRegister.isEnabled = true
                     binding.tvRegister.alpha = 1f
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    findNavController().navigate(R.id.action_login_registro_fragment_to_home_principal2)
                 }
                 is Resource.Error ->{
                     binding.progress.visibility = View.GONE
                     binding.tvRegister.isEnabled = true
                     binding.tvRegister.alpha = 1f
 
-                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        resource.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -96,10 +105,10 @@ class activity_login_registro : AppCompatActivity() {
             isClickable = esValido
 
             if (esValido){
-                setTextColor(ContextCompat.getColor(context, R.color.white))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 setTypeface(null, Typeface.BOLD)
             }else{
-                setTextColor(ContextCompat.getColor(context, R.color.gray_text))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text))
                 setTypeface(null, Typeface.NORMAL)
             }
         }
@@ -111,7 +120,7 @@ class activity_login_registro : AppCompatActivity() {
         if (binding.btnLogin.isEnabled) {
 
             binding.btnLogin.setTextColor(
-                ContextCompat.getColor(this, R.color.white)
+                ContextCompat.getColor(requireContext(), R.color.white)
             )
 
             binding.btnLogin.setTypeface(null, Typeface.BOLD)
@@ -119,7 +128,7 @@ class activity_login_registro : AppCompatActivity() {
         } else {
 
             binding.btnLogin.setTextColor(
-                ContextCompat.getColor(this, R.color.gray_text)
+                ContextCompat.getColor(requireContext(), R.color.gray_text)
             )
 
             binding.btnLogin.setTypeface(null, Typeface.NORMAL)
@@ -136,7 +145,7 @@ class activity_login_registro : AppCompatActivity() {
                 binding.tvPasswordError.visibility = View.GONE
 
                 binding.tilPassword.boxStrokeColor =
-                    ContextCompat.getColor(this, android.R.color.white)
+                    ContextCompat.getColor(requireContext(), android.R.color.white)
             }
 
             password.length < 6 -> {
@@ -144,7 +153,7 @@ class activity_login_registro : AppCompatActivity() {
                 binding.tvPasswordError.visibility = View.VISIBLE
 
                 binding.tilPassword.boxStrokeColor =
-                    ContextCompat.getColor(this, android.R.color.holo_red_light)
+                    ContextCompat.getColor(requireContext(), android.R.color.holo_red_light)
             }
 
             else -> {
@@ -152,7 +161,7 @@ class activity_login_registro : AppCompatActivity() {
                 binding.tvPasswordError.visibility = View.GONE
 
                 binding.tilPassword.boxStrokeColor =
-                    ContextCompat.getColor(this, android.R.color.white)
+                    ContextCompat.getColor(requireContext(), android.R.color.white)
             }
         }
     }

@@ -26,9 +26,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.activity_login_registro"
-            android:exported="true"/>
-        <activity
             android:name=".ui.activities.MainActivity"
             android:exported="false" />
     </application>
