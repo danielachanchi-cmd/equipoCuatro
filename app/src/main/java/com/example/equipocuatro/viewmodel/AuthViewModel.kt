@@ -4,13 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.equipocuatro.model.UserRequest
 import com.example.equipocuatro.repository.AuthRepository
 import com.example.equipocuatro.utils.Resource
 import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.internal.userAgent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,15 +18,15 @@ class AuthViewModel @Inject constructor(
     private val _res = MutableLiveData<Resource<AuthResult>>()
     val res: LiveData<Resource<AuthResult>> get() = _res
 
-    fun register(userRequest: UserRequest){
+    fun register(email: String, pass: String){
         viewModelScope.launch {
             _res.postValue(Resource.Loading)
             try {
-                val authResult = repository.register(userRequest)
+                val authResult = repository.register(email,pass)
                 val uid = authResult?.user?.uid
 
                 if (uid != null){
-                    repository.createUserInFirestore(uid, userRequest.email)
+                    repository.createUserInFirestore(uid, email)
                     _res.postValue(Resource.Success(authResult))
                 }
             }catch (e: Exception){

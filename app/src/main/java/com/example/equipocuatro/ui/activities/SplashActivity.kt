@@ -19,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
 
         viewModel.navigateToLogin.observe(this) { shouldNavigate ->
             if (shouldNavigate) {
-                val intent = Intent(this, activity_login_registro::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
