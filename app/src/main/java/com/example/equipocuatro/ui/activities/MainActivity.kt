@@ -1,9 +1,11 @@
 package com.example.equipocuatro.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.example.equipocuatro.R
+import com.example.equipocuatro.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,19 +18,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        if (savedInstanceState == null) {
-            val navHostFragment = supportFragmentManager
-                .findFragmentById(R.id.fragment_container_view) as NavHostFragment
-            val navController = navHostFragment.navController
-            val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-
-            navGraph.setStartDestination(
-                if (auth.currentUser != null) R.id.home_principal2
-                else R.id.login_registro_fragment
-            )
-            navController.graph = navGraph
+        if (auth.currentUser == null) {
+            val intent = Intent(this, activity_login_registro::class.java)
+            startActivity(intent)
+            finish()
+            return
         }
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

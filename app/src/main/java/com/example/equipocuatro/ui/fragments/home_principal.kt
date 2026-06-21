@@ -24,6 +24,7 @@ import com.example.equipocuatro.ui.dialogs.MostrarRetoAleatorio
 import com.example.equipocuatro.viewmodel.AuthViewModel
 import com.example.equipocuatro.viewmodel.HomeViewModel
 import android.os.CountDownTimer
+import com.example.equipocuatro.ui.activities.activity_login_registro
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -302,7 +303,9 @@ class home_principal : Fragment() {
         binding.toolbarHome.logoutButton.setOnClickListener {
             it.startTouchAnimation {
                 authViewModel.signOut()
-                findNavController().navigate(R.id.action_home_principal2_to_login_registro_fragment)
+                val intent = Intent(requireContext(), activity_login_registro::class.java)
+                startActivity(intent)
+                requireActivity().finish()
             }
         }
     }
