@@ -46,12 +46,16 @@ class AgregarReto {
 
                 val descripcionReto = binding.etReto.text.toString().trim()
                 val reto = Reto(descripcion = descripcionReto)
+                binding.btnGuardar.isEnabled = false
 
-                retoViewModel.saveReto(reto){message ->
+                retoViewModel.saveReto(reto){message, success ->
                     Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
-                    onGuardar()
+                    binding.btnGuardar.isEnabled = !success
+                    if (success) {
+                        onGuardar()
+                        alertDialog.dismiss()
+                    }
                 }
-                alertDialog.dismiss()
             }
 
             binding.btnCancelar.setOnClickListener {

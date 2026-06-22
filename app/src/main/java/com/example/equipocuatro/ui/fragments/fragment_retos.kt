@@ -90,9 +90,10 @@ class fragment_retos : Fragment() {
         EditarReto.showDialogoEditarReto(
             context = requireContext(),
             retoActual = reto.descripcion
-        ) { descripcionEditada ->
-            retoViewModel.updateReto(reto.copy(descripcion = descripcionEditada)) { message ->
+        ) { descripcionEditada, finalizarGuardado ->
+            retoViewModel.updateReto(reto.copy(descripcion = descripcionEditada)) { message, success ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                finalizarGuardado(success)
             }
         }
     }
@@ -102,9 +103,10 @@ class fragment_retos : Fragment() {
         EliminarReto.showDialogoEliminarReto(
             context = requireContext(),
             reto = reto.descripcion
-        ) {
-            retoViewModel.deleteReto(reto) { message ->
+        ) { finalizarEliminacion ->
+            retoViewModel.deleteReto(reto) { message, success ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                finalizarEliminacion(success)
             }
         }
     }

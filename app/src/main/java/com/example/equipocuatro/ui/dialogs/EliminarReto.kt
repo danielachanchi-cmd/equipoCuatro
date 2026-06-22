@@ -12,12 +12,12 @@ class EliminarReto {
         fun showDialogoEliminarReto(
             context: Context,
             reto: String = "",
-            onEliminar: () -> Unit = {}
+            onEliminar: ((Boolean) -> Unit) -> Unit = {}
         ) {
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_eliminar_reto, null)
             val tvRetoDeleteDescription = view.findViewById<TextView>(R.id.tvRetoDeleteDescription)
             val btnNoDelete = view.findViewById<Button>(R.id.btnNoDelete)
-            val btnSiDelete = view.findViewById<Button>(R.id.btnSiDelete)
+            val btnSiDelete = view.findViewById<TextView>(R.id.btnSiDelete)
 
             val alertDialog = AlertDialog.Builder(context).create()
             alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -31,8 +31,13 @@ class EliminarReto {
             }
 
             btnSiDelete.setOnClickListener {
-                onEliminar()
-                alertDialog.dismiss()
+                btnSiDelete.isEnabled = false
+                onEliminar { success ->
+                    btnSiDelete.isEnabled = true
+                    if (success) {
+                        alertDialog.dismiss()
+                    }
+                }
             }
 
             alertDialog.show()
