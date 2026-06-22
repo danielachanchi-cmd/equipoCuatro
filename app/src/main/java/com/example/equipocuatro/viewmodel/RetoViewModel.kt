@@ -70,7 +70,7 @@ class RetoViewModel @Inject constructor(
                     message("Error al actualizar el reto: $error", false)
                 }
             } catch (e: Exception) {
-                message("Error al  el reto: ${e.message}", false)
+                message("Error al actualizar el reto: ${e.message}", false)
             } finally {
                 _progesState.value = false
             }
