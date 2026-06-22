@@ -1,6 +1,8 @@
 package com.example.equipocuatro.repository
 
 import com.example.equipocuatro.model.Reto
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -9,9 +11,18 @@ import kotlin.random.Random
 import javax.inject.Inject
 
 class RetosRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val auth: FirebaseAuth
 ) {
-    private val retosCollection = firestore.collection("retos")
+    private fun currentUserRetosCollection(): CollectionReference {
+        val userId = auth.currentUser?.uid
+            ?: throw IllegalStateException("No hay una cuenta autenticada")
+
+        return firestore
+            .collection("users")
+            .document(userId)
+            .collection("retos")
+    }
 
     suspend fun saveReto(reto: Reto, messageResponse: (String, Boolean)-> Unit){
         try{
@@ -19,7 +30,10 @@ class RetosRepository @Inject constructor(
             val retoToSave = reto.copy(id = retoId)
 
             withContext(Dispatchers.IO) {
-                retosCollection.document(retoId.toString()).set(retoToSave).await()
+                currentUserRetosCollection()
+                    .document(retoId.toString())
+                    .set(retoToSave)
+                    .await()
             }
             messageResponse("Reto guardado correctamente", true)
         } catch (e: Exception){
@@ -29,7 +43,7 @@ class RetosRepository @Inject constructor(
 
     suspend fun getListReto(): MutableList<Reto> {
         return withContext(Dispatchers.IO) {
-            retosCollection
+            currentUserRetosCollection()
                 .orderBy("id")
                 .get()
                 .await()
@@ -58,7 +72,10 @@ class RetosRepository @Inject constructor(
     suspend fun updateReto(reto: Reto): Result<Unit> {
         try {
             withContext(Dispatchers.IO) {
-                retosCollection.document(reto.id.toString()).set(reto).await()
+                currentUserRetosCollection()
+                    .document(reto.id.toString())
+                    .set(reto)
+                    .await()
             }
             return Result.success(Unit)
         } catch (e: Exception) {
@@ -69,7 +86,10 @@ class RetosRepository @Inject constructor(
     suspend fun deleteReto(reto: Reto): Result<Unit> {
         return try {
             withContext(Dispatchers.IO) {
-                retosCollection.document(reto.id.toString()).delete().await()
+                currentUserRetosCollection()
+                    .document(reto.id.toString())
+                    .delete()
+                    .await()
             }
             Result.success(Unit)
         } catch (e: Exception) {
