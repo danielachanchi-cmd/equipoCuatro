@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/login_registro_fragment">
+    app:startDestination="@id/home_principal2">
     <fragment
         android:id="@+id/fragment_retos"
         android:name="com.example.equipocuatro.ui.fragments.fragment_retos"
@@ -24,11 +24,6 @@
         <action
             android:id="@+id/action_home_principal2_to_fragment_retos2"
             app:destination="@id/fragment_retos" />
-        <action
-            android:id="@+id/action_home_principal2_to_login_registro_fragment"
-            app:destination="@id/login_registro_fragment"
-            app:popUpTo="@id/home_principal2"
-            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/instrucciones"
@@ -38,16 +33,5 @@
         <action
             android:id="@+id/action_instrucciones_to_home_principal2"
             app:destination="@id/home_principal2" />
-    </fragment>
-    <fragment
-        android:id="@+id/login_registro_fragment"
-        android:name="com.example.equipocuatro.ui.fragments.login_registro_fragment"
-        android:label="login_registro_fragment"
-        tools:layout="@layout/fragment_login_registro_fragment">
-        <action
-            android:id="@+id/action_login_registro_fragment_to_home_principal2"
-            app:destination="@id/home_principal2"
-            app:popUpTo="@id/login_registro_fragment"
-            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
