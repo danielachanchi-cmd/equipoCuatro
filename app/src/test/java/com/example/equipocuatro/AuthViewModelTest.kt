@@ -24,142 +24,138 @@ import org.mockito.Mockito
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthViewModelTest {
 
+    // Uso esta regla para que LiveData funcione de forma sincrona en los tests
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    // Creo el mock del repositorio con Mockito para simular sus respuestas
     private val authRepository = Mockito.mock(AuthRepository::class.java)
     private lateinit var authViewModel: AuthViewModel
 
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-        authViewModel = AuthViewModel(authRepository)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
-    // El truco maestro para evitar los nulos molestos de Mockito en Kotlin
+    // Uso este metodo auxiliar para evitar NullPointerException de Mockito con tipos Kotlin no nulos
     private fun <T> anyKotlin(): T {
         Mockito.any<T>()
         @Suppress("UNCHECKED_CAST")
         return null as T
     }
 
-    @Test
-    fun testMetodoRegister_Exitoso() = runTest {
-        ////given
-        val userRequest = UserRequest("test@email.com", "123456")
+    @Before
+    fun setUp() {
+        // Reemplazo Dispatchers.Main con el dispatcher de prueba antes de cada test
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+        authViewModel = AuthViewModel(authRepository)
+    }
 
-        // Creamos mocks encadenados para simular authResult.user.uid
+    @After
+    fun tearDown() {
+        // Restauro Dispatchers.Main despues de cada test para no afectar otras pruebas
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun testMetodoRegisterExitoso() = runTest {
+        // Given: configuro los mocks para simular un registro exitoso con uid valido
+        val userRequest = UserRequest("test@email.com", "123456")
         val mockAuthResult = Mockito.mock(AuthResult::class.java)
         val mockFirebaseUser = Mockito.mock(FirebaseUser::class.java)
 
         Mockito.`when`(mockFirebaseUser.uid).thenReturn("uid_de_prueba_123")
         Mockito.`when`(mockAuthResult.user).thenReturn(mockFirebaseUser)
-
-        // Configuramos las respuestas esperadas del repositorio
         Mockito.`when`(authRepository.register(anyKotlin())).thenReturn(mockAuthResult)
 
-        ////when
+        // Mockeo createUserInFirestore como funcion suspend que retorna Unit
+        Mockito.`when`(authRepository.createUserInFirestore(anyKotlin(), anyKotlin())).thenReturn(Unit)
+
+        // When: llamo al metodo register del ViewModel
         authViewModel.register(userRequest)
 
-        ////Then
-        // Verificamos que el estado final sea un Success que envuelva nuestro mockAuthResult
+        // Then: verifico que el estado final es Resource.Success con el authResult correcto
         val valorFinal = authViewModel.res.value
         assertTrue(valorFinal is Resource.Success)
         assertEquals(mockAuthResult, (valorFinal as Resource.Success).data)
     }
 
     @Test
-    fun testMetodoRegister_Error() = runTest {
-        ////given
+    fun testMetodoRegisterError() = runTest {
+        // Given: configuro el mock para que lance una excepcion simulando fallo de Firebase
         val userRequest = UserRequest("test@email.com", "123456")
-
-        // Forzamos a que lance una excepción simulando un fallo de red o credenciales duplicadas
         Mockito.`when`(authRepository.register(anyKotlin())).thenThrow(RuntimeException("Fallo de Firebase"))
 
-        ////when
+        // When: llamo al metodo register del ViewModel
         authViewModel.register(userRequest)
 
-        ////Then
+        // Then: verifico que el estado final es Resource.Error con el mensaje correcto
         val valorFinal = authViewModel.res.value
         assertTrue(valorFinal is Resource.Error)
         assertEquals("Error en el registro", (valorFinal as Resource.Error).message)
     }
 
     @Test
-    fun testMetodoLogin_Exitoso() = runTest {
-        ////given
+    fun testMetodoLoginExitoso() = runTest {
+        // Given: configuro el mock para que devuelva un authResult valido
         val email = "test@email.com"
         val pass = "123456"
         val mockAuthResult = Mockito.mock(AuthResult::class.java)
-
         Mockito.`when`(authRepository.login(anyKotlin(), anyKotlin())).thenReturn(mockAuthResult)
 
-        ////when
+        // When: llamo al metodo login del ViewModel
         authViewModel.login(email, pass)
 
-        ////Then
+        // Then: verifico que el estado final es Resource.Success con el authResult correcto
         val valorFinal = authViewModel.res.value
         assertTrue(valorFinal is Resource.Success)
         assertEquals(mockAuthResult, (valorFinal as Resource.Success).data)
     }
 
     @Test
-    fun testMetodoLogin_Incorrecto() = runTest {
-        ////given
+    fun testMetodoLoginIncorrecto() = runTest {
+        // Given: configuro el mock para que devuelva null simulando credenciales incorrectas
         val email = "test@email.com"
         val pass = "wrong_pass"
-
-        // Simulamos que las credenciales devuelven un resultado nulo
         Mockito.`when`(authRepository.login(anyKotlin(), anyKotlin())).thenReturn(null)
 
-        ////when
+        // When: llamo al metodo login del ViewModel
         authViewModel.login(email, pass)
 
-        ////Then
+        // Then: verifico que el estado final es Resource.Error con el mensaje correcto
         val valorFinal = authViewModel.res.value
         assertTrue(valorFinal is Resource.Error)
         assertEquals("Login incorrecto", (valorFinal as Resource.Error).message)
     }
 
     @Test
-    fun testMetodoIsUserLoggedIn_True() {
-        ////given
+    fun testMetodoIsUserLoggedInTrue() {
+        // Given: configuro el mock para que devuelva un usuario autenticado
         val mockFirebaseUser = Mockito.mock(FirebaseUser::class.java)
         Mockito.`when`(authRepository.getCurrentUser()).thenReturn(mockFirebaseUser)
 
-        ////when
+        // When: llamo a isUserLoggedIn
         val resultado = authViewModel.isUserLoggedIn()
 
-        ////Then
+        // Then: verifico que retorna true porque hay un usuario autenticado
         assertTrue(resultado)
     }
 
     @Test
-    fun testMetodoIsUserLoggedIn_False() {
-        ////given
+    fun testMetodoIsUserLoggedInFalse() {
+        // Given: configuro el mock para que devuelva null simulando que no hay sesion activa
         Mockito.`when`(authRepository.getCurrentUser()).thenReturn(null)
 
-        ////when
+        // When: llamo a isUserLoggedIn
         val resultado = authViewModel.isUserLoggedIn()
 
-        ////Then
+        // Then: verifico que retorna false porque no hay usuario autenticado
         assertFalse(resultado)
     }
 
     @Test
     fun testMetodoSignOut() {
-        ////given (Nada inicial porque signOut no retorna nada)
+        // Given: no necesito configuracion previa porque signOut no retorna nada
 
-        ////when
+        // When: llamo a signOut del ViewModel
         authViewModel.signOut()
 
-        ////Then
-        // Verificamos de forma limpia que el repositorio recibió la orden exacta de cerrar sesión
+        // Then: verifico con Mockito que el repositorio recibio la orden de cerrar sesion
         Mockito.verify(authRepository).signOut()
     }
 }
