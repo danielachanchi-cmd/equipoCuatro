@@ -21,29 +21,33 @@ import org.mockito.stubbing.Answer
 @OptIn(ExperimentalCoroutinesApi::class)
 class RetoViewModelTest {
 
+    // Uso esta regla para que LiveData funcione de forma sincrona en los tests
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    // Creo el mock del repositorio con Mockito para simular sus respuestas
     private val retoRepository = Mockito.mock(RetosRepository::class.java)
     private lateinit var retoViewModel: RetoViewModel
 
     @Before
     fun setUp() {
+        // Reemplazo Dispatchers.Main con UnconfinedTestDispatcher para ejecutar corrutinas inmediatamente
         Dispatchers.setMain(UnconfinedTestDispatcher())
         retoViewModel = RetoViewModel(retoRepository)
     }
 
     @After
     fun tearDown() {
+        // Restauro Dispatchers.Main despues de cada test para no afectar otras pruebas
         Dispatchers.resetMain()
     }
 
-    // Método auxiliar para crear objetos de prueba rápidos
+    // Creo un objeto Reto de prueba para reutilizar en los tests
     private fun crearRetoEjemplo(): Reto {
-        return Reto(1, "Descripción de prueba")
+        return Reto(1, "Descripcion de prueba")
     }
 
-    // El truco definitivo para evitar el NullPointerException en Kotlin
+    // Uso este metodo auxiliar para evitar NullPointerException de Mockito con tipos Kotlin no nulos
     private fun <T> anyKotlin(): T {
         Mockito.any<T>()
         @Suppress("UNCHECKED_CAST")
@@ -52,59 +56,50 @@ class RetoViewModelTest {
 
     @Test
     fun testMetodoGetListReto() = runTest {
-        ////given
+        // Given: preparo el mock del repositorio para devolver una lista con un reto
         val mockRetos = mutableListOf(crearRetoEjemplo())
-        val expectedResult = mockRetos
-
         Mockito.`when`(retoRepository.getListReto()).thenReturn(mockRetos)
 
-        ////when
+        // When: llamo al metodo getListReto del ViewModel
         retoViewModel.getListReto()
 
-        ////Then
-        assertEquals(expectedResult, retoViewModel.listReto.value)
+        // Then: verifico que listReto contiene la lista devuelta por el repositorio
+        assertEquals(mockRetos, retoViewModel.listReto.value)
     }
 
     @Test
     fun testMetodoUpdateReto() = runTest {
-        ////given
+        // Given: preparo el mock para que updateReto sea exitoso y getListReto devuelva la lista
         val retoTest = crearRetoEjemplo()
         val mockRetos = mutableListOf(retoTest)
-
-        val expectedResult = "Reto actualizado correctamente"
-        val expectedSuccess = true
-        val expectedList = mockRetos
 
         Mockito.`when`(retoRepository.updateReto(anyKotlin())).thenReturn(Result.success(Unit))
         Mockito.`when`(retoRepository.getListReto()).thenReturn(mockRetos)
 
-        var resulMessage = ""
-        var resulSuccess = false
+        var resultMessage = ""
+        var resultSuccess = false
 
-        ////when
+        // When: llamo al metodo updateReto del ViewModel
         retoViewModel.updateReto(retoTest) { msg, success ->
-            resulMessage = msg
-            resulSuccess = success
+            resultMessage = msg
+            resultSuccess = success
         }
 
-        ////Then
-        assertEquals(expectedResult, resulMessage)
-        assertEquals(expectedSuccess, resulSuccess)
-        assertEquals(expectedList, retoViewModel.listReto.value)
+        // Then: verifico el mensaje, el exito y que la lista se actualizo correctamente
+        assertEquals("Reto actualizado correctamente", resultMessage)
+        assertEquals(true, resultSuccess)
+        assertEquals(mockRetos, retoViewModel.listReto.value)
     }
 
     @Test
     fun testMetodoSaveReto() = runTest {
-        ////given
+        // Given: preparo el mock para que saveReto llame al callback con exito
         val nuevoReto = crearRetoEjemplo()
         val mockRetos = mutableListOf(nuevoReto)
 
-        val expectedResult = "Reto guardado"
-        val expectedSuccess = true
-        val expectedList = mockRetos
-
         Mockito.doAnswer(object : Answer<Unit> {
             override fun answer(invocation: InvocationOnMock) {
+                // Obtengo el callback del segundo argumento y lo invoco con exito
                 val callback = invocation.getArgument<(String, Boolean) -> Unit>(1)
                 callback.invoke("Reto guardado", true)
             }
@@ -112,46 +107,42 @@ class RetoViewModelTest {
 
         Mockito.`when`(retoRepository.getListReto()).thenReturn(mockRetos)
 
-        var resulMessage = ""
-        var resulSuccess = false
+        var resultMessage = ""
+        var resultSuccess = false
 
-        ////when
+        // When: llamo al metodo saveReto del ViewModel
         retoViewModel.saveReto(nuevoReto) { msg, success ->
-            resulMessage = msg
-            resulSuccess = success
+            resultMessage = msg
+            resultSuccess = success
         }
 
-        ////Then
-        assertEquals(expectedResult, resulMessage)
-        assertEquals(expectedSuccess, resulSuccess)
-        assertEquals(expectedList, retoViewModel.listReto.value)
+        // Then: verifico el mensaje, el exito y que la lista se actualizo correctamente
+        assertEquals("Reto guardado", resultMessage)
+        assertEquals(true, resultSuccess)
+        assertEquals(mockRetos, retoViewModel.listReto.value)
     }
 
     @Test
     fun testMetodoDeleteReto() = runTest {
-        ////given
+        // Given: preparo el mock para que deleteReto sea exitoso y la lista quede vacia
         val retoAEliminar = crearRetoEjemplo()
         val mockRetosVacios = mutableListOf<Reto>()
-
-        val expectedResult = "Reto eliminado correctamente"
-        val expectedSuccess = true
-        val expectedList = mockRetosVacios
 
         Mockito.`when`(retoRepository.deleteReto(anyKotlin())).thenReturn(Result.success(Unit))
         Mockito.`when`(retoRepository.getListReto()).thenReturn(mockRetosVacios)
 
-        var resulMessage = ""
-        var resulSuccess = false
+        var resultMessage = ""
+        var resultSuccess = false
 
-        ////when
+        // When: llamo al metodo deleteReto del ViewModel
         retoViewModel.deleteReto(retoAEliminar) { msg, success ->
-            resulMessage = msg
-            resulSuccess = success
+            resultMessage = msg
+            resultSuccess = success
         }
 
-        ////Then
-        assertEquals(expectedResult, resulMessage)
-        assertEquals(expectedSuccess, resulSuccess)
-        assertEquals(expectedList, retoViewModel.listReto.value)
+        // Then: verifico el mensaje, el exito y que la lista quedo vacia
+        assertEquals("Reto eliminado correctamente", resultMessage)
+        assertEquals(true, resultSuccess)
+        assertEquals(mockRetosVacios, retoViewModel.listReto.value)
     }
 }
